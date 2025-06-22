@@ -40,19 +40,6 @@ for _, folder in {'newvape', 'newvape/games', 'newvape/profiles', 'newvape/asset
 	end
 end
 
-if identifyexecutor then
-	if string.find(({identifyexecutor()})[1], 'JJSploit') then
-		getgenv().identifyexecutor = function()
-			return 'Xeno'
-		end
-	end
-	if table.find({'Xeno'}, ({identifyexecutor()})[1]) then
-		getgenv().cloneref = function(val)
-			return val
-		end
-	end
-end
-
 if not shared.VapeDeveloper then
 	local _, subbed = pcall(function()
 		return game:HttpGet('https://github.com/skidvape/KoolForRoblox')

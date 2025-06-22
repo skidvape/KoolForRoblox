@@ -8,6 +8,11 @@ if identifyexecutor then
 			return val
 		end
 	end
+	if table.find({'Xeno'}, ({identifyexecutor()})[1]) then
+		getgenv().cloneref = function(val)
+			return val
+		end
+	end
 end
 
 local vape
