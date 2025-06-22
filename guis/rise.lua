@@ -244,7 +244,7 @@ local function downloadFile(path, func)
 	if not isfile(path) then
 		createDownloader(path)
 		local suc, res = pcall(function()
-			return game:HttpGet('https://raw.githubusercontent.com/sstvskids/VapeV4ForRoblox/'..readfile('newvape/profiles/commit.txt')..'/'..select(1, path:gsub('newvape/', '')), true)
+			return game:HttpGet('https://raw.githubusercontent.com/skidvape/KoolForRoblox/'..readfile('newvape/profiles/commit.txt')..'/'..select(1, path:gsub('newvape/', '')), true)
 		end)
 		if not suc or res == '404: Not Found' then
 			error(res)
@@ -269,9 +269,7 @@ local function getexec()
 	end
 	return (identifyexecutor == nil and true) or getgenv().koolce == true or (#foundexecs > 0)
 end
-getcustomasset = not inputService.TouchEnabled and not getexec() == true and assetfunction and function(path)
-	return downloadFile(path, assetfunction)
-end or function(path)
+getcustomasset = function(path)
 	return getcustomassets[path] or ''
 end
 
@@ -2857,7 +2855,7 @@ mainapi.Categories.Main:CreateDropdown({
 			if shared.VapeDeveloper then
 				loadstring(readfile('newvape/loader.lua'), 'loader')()
 			else
-				loadstring(game:HttpGet('https://raw.githubusercontent.com/sstvskids/VapeV4ForRoblox/'..readfile('newvape/profiles/commit.txt')..'/loader.lua', true))()
+				loadstring(game:HttpGet('https://raw.githubusercontent.com/skidvape/KoolForRoblox/'..readfile('newvape/profiles/commit.txt')..'/loader.lua', true))()
 			end
 		end
 	end
@@ -2885,7 +2883,7 @@ mainapi.Categories.Main:CreateButton({
 		if shared.VapeDeveloper then
 			loadstring(readfile('newvape/loader.lua'), 'loader')()
 		else
-			loadstring(game:HttpGet('https://raw.githubusercontent.com/sstvskids/VapeV4ForRoblox/'..readfile('newvape/profiles/commit.txt')..'/loader.lua', true))()
+			loadstring(game:HttpGet('https://raw.githubusercontent.com/skidvape/KoolForRoblox/'..readfile('newvape/profiles/commit.txt')..'/loader.lua', true))()
 		end
 	end
 })

@@ -3,7 +3,7 @@ if shared.vape then shared.vape:Uninject() end
 
 -- why do exploits fail to implement anything correctly? Is it really that hard?
 if identifyexecutor then
-	if (getgenv().koolce == true and getcustomasset) or table.find({'Argon', 'Wave', 'Velocity'}, ({identifyexecutor()})[1]) then
+	if getcustomasset then
 		getgenv().setthreadidentity = function(val)
 			return val
 		end
@@ -33,7 +33,7 @@ local playersService = cloneref(game:GetService('Players'))
 local function downloadFile(path, func)
 	if not isfile(path) then
 		local suc, res = pcall(function()
-			return game:HttpGet('https://raw.githubusercontent.com/sstvskids/VapeV4ForRoblox/'..readfile('newvape/profiles/commit.txt')..'/'..select(1, path:gsub('newvape/', '')), true)
+			return game:HttpGet('https://raw.githubusercontent.com/skidvape/KoolForRoblox/'..readfile('newvape/profiles/commit.txt')..'/'..select(1, path:gsub('newvape/', '')), true)
 		end)
 		if not suc or res == '404: Not Found' then
 			error(res)
@@ -65,7 +65,7 @@ local function finishLoading()
 				if shared.VapeDeveloper then
 					loadstring(readfile('newvape/loader.lua'), 'loader')()
 				else
-					loadstring(game:HttpGet('https://raw.githubusercontent.com/sstvskids/VapeV4ForRoblox/'..readfile('newvape/profiles/commit.txt')..'/loader.lua', true), 'loader')()
+					loadstring(game:HttpGet('https://raw.githubusercontent.com/skidvape/KoolForRoblox/'..readfile('newvape/profiles/commit.txt')..'/loader.lua', true), 'loader')()
 				end
 			]]
 			if shared.VapeDeveloper then
@@ -102,18 +102,15 @@ local urlpath
 if not shared.VapeIndependent then
 	loadstring(downloadFile('newvape/games/universal.lua'), 'universal')()
 	task.spawn(function(...)
-		urlpath = (getgenv().koolce == true and 'newvape/games/trashexecs/') or 'newvape/games/'
 		if isfile(urlpath..game.PlaceId..'.lua') then
-			loadstring(readfile(urlpath..game.PlaceId..'.lua'), tostring(game.PlaceId))(...)
+			loadstring(readfile('newvape/games/'..game.PlaceId..'.lua'), tostring(game.PlaceId))(...)
 		else
 			if not shared.VapeDeveloper then
 				local suc, res = pcall(function()
-					urlpath = (getgenv().koolce == true and '/games/trashexecs/') or '/games/'
-					return game:HttpGet('https://raw.githubusercontent.com/sstvskids/VapeV4ForRoblox/'..readfile('newvape/profiles/commit.txt')..urlpath..game.PlaceId..'.lua', true)
+					return game:HttpGet('https://raw.githubusercontent.com/skidvape/KoolForRoblox/'..readfile('newvape/profiles/commit.txt')..'/games/'..game.PlaceId..'.lua', true)
 				end)
 				if suc and res ~= '404: Not Found' then
-					urlpath = (getgenv().koolce == true and 'newvape/games/trashexecs/') or 'newvape/games/'
-					loadstring(downloadFile(urlpath..game.PlaceId..'.lua'), tostring(game.PlaceId))(...)
+					loadstring(downloadFile('newvape/games/'..game.PlaceId..'.lua'), tostring(game.PlaceId))(...)
 				end
 			end
 		end

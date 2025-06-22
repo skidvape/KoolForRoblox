@@ -14,7 +14,7 @@ end
 local function downloadFile(path, func)
 	if not isfile(path) then
 		local suc, res = pcall(function()
-			return game:HttpGet('https://raw.githubusercontent.com/sstvskids/VapeV4ForRoblox/'..readfile('newvape/profiles/commit.txt')..'/'..select(1, path:gsub('newvape/', '')), true)
+			return game:HttpGet('https://raw.githubusercontent.com/skidvape/KoolForRoblox/'..readfile('newvape/profiles/commit.txt')..'/'..select(1, path:gsub('newvape/', '')), true)
 		end)
 		if not suc or res == '404: Not Found' then
 			error(res)
@@ -831,7 +831,7 @@ local gotversion = false
 run(function()
 	repeat task.wait()
 		local suc, res = pcall(function()
-			return httpService:JSONDecode(game:HttpGet('https://raw.githubusercontent.com/sstvskids/VapeV4ForRoblox/refs/heads/main/libraries/version.json'))
+			return httpService:JSONDecode(game:HttpGet('https://raw.githubusercontent.com/skidvape/KoolForRoblox/refs/heads/main/libraries/version.json'))
 		end)
 		if suc then
 			if (res.version == version or res.cfgversion == cfgversion or res.wlversion == wlversion) then return gotversion == false end

@@ -310,38 +310,7 @@ local function createMobileButton(buttonapi, position)
 	buttonapi.Bind = {Button = button}
 end
 
-local function downloadFile(path, func)
-	if not isfile(path) then
-		createDownloader(path)
-		local suc, res = pcall(function()
-			return game:HttpGet('https://raw.githubusercontent.com/sstvskids/VapeV4ForRoblox/'..readfile('newvape/profiles/commit.txt')..'/'..select(1, path:gsub('newvape/', '')), true)
-		end)
-		if not suc or res == '404: Not Found' then
-			error(res)
-		end
-		if path:find('.lua') then
-			res = '--This watermark is used to delete the file if its cached, remove it to make the file persist after vape updates.\n'..res
-		end
-		writefile(path, res)
-	end
-	return (func or readfile)(path)
-end
-
-local function getexec()
-	local execs = {'Velocity'}
-	local foundexecs = {}
-	if identifyexecutor then
-		for i,v in execs do
-			if string.find(identifyexecutor(), v) then
-				table.insert(foundexecs, identifyexecutor)
-			end
-		end
-	end
-	return (identifyexecutor == nil and true) or getgenv().koolce == true or (#foundexecs > 0)
-end
-getcustomasset = not inputService.TouchEnabled and not getexec() == true and assetfunction and function(path)
-	return downloadFile(path, assetfunction)
-end or function(path)
+getcustomasset = function(path)
 	return getcustomassets[path] or ''
 end
 
@@ -5923,7 +5892,7 @@ general:CreateButton({
 		if shared.VapeDeveloper then
 			loadstring(readfile('newvape/loader.lua'), 'loader')()
 		else
-			loadstring(game:HttpGet('https://raw.githubusercontent.com/sstvskids/VapeV4ForRoblox/'..readfile('newvape/profiles/commit.txt')..'/loader.lua', true))()
+			loadstring(game:HttpGet('https://raw.githubusercontent.com/skidvape/KoolForRoblox/'..readfile('newvape/profiles/commit.txt')..'/loader.lua', true))()
 		end
 	end,
 	Tooltip = 'This will set your profile to the default settings of Vape'
@@ -5942,7 +5911,7 @@ general:CreateButton({
 		if shared.VapeDeveloper then
 			loadstring(readfile('newvape/loader.lua'), 'loader')()
 		else
-			loadstring(game:HttpGet('https://raw.githubusercontent.com/sstvskids/VapeV4ForRoblox/'..readfile('newvape/profiles/commit.txt')..'/loader.lua', true))()
+			loadstring(game:HttpGet('https://raw.githubusercontent.com/skidvape/KoolForRoblox/'..readfile('newvape/profiles/commit.txt')..'/loader.lua', true))()
 		end
 	end,
 	Tooltip = 'Reloads vape for debugging purposes'
@@ -6050,7 +6019,7 @@ guipane:CreateDropdown({
 			if shared.VapeDeveloper then
 				loadstring(readfile('newvape/loader.lua'), 'loader')()
 			else
-				loadstring(game:HttpGet('https://raw.githubusercontent.com/sstvskids/VapeV4ForRoblox/'..readfile('newvape/profiles/commit.txt')..'/loader.lua', true))()
+				loadstring(game:HttpGet('https://raw.githubusercontent.com/skidvape/KoolForRoblox/'..readfile('newvape/profiles/commit.txt')..'/loader.lua', true))()
 			end
 		end
 	end,
