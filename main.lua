@@ -98,11 +98,10 @@ end
 vape = loadstring(downloadFile('newvape/guis/'..gui..'.lua'), 'gui')()
 shared.vape = vape
 
-local urlpath
 if not shared.VapeIndependent then
 	loadstring(downloadFile('newvape/games/universal.lua'), 'universal')()
 	task.spawn(function(...)
-		if isfile(urlpath..game.PlaceId..'.lua') then
+		if isfile('newvape/games/'..game.PlaceId..'.lua') then
 			loadstring(readfile('newvape/games/'..game.PlaceId..'.lua'), tostring(game.PlaceId))(...)
 		else
 			if not shared.VapeDeveloper then
