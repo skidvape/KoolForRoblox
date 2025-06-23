@@ -1,3 +1,5 @@
+shared.bridgeloaded = false
+
 local isfile = isfile or function(file)
 	local suc, res = pcall(function()
 		return readfile(file)

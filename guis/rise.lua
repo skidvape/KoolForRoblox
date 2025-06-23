@@ -2412,6 +2412,7 @@ end
 
 function mainapi:Save(newprofile)
 	if not self.Loaded then return end
+	if not shared.bridgeloaded then return end
 	local guidata = {
 		Categories = {},
 		Profile = newprofile or self.Profile,

@@ -51,7 +51,19 @@ local function downloadFile(path, func)
 	return (func or readfile)(path)
 end
 
+local function getPlaceId()
+	local bridgeid = game.PlaceId
+	if bridgeid == 11630038968 or 12011959048 or 14191889582 or 14662411059 then
+		return true
+	end
+
+	return false
+end
+
 local function finishLoading()
+	if not getPlaceId() == true then
+		shared.bridgeloaded = true
+	end
 	vape.Init = nil
 	vape:Load()
 	task.spawn(function()
