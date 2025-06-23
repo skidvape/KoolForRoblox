@@ -5533,8 +5533,18 @@ function mainapi:Remove(obj)
 	end
 end
 
+function mainapi:getbridgeid()
+	local bridgeid = game.PlaceId
+	if bridgeid == 11630038968 or 12011959048 or 14191889582 or 14662411059 then
+		return true
+	end
+
+	return false
+end
+
 function mainapi:Save(newprofile)
 	if not self.Loaded then return end
+	if not self:getbridgeid() == true and not shared.bridgeloaded then return end
 	local guidata = {
 		Categories = {},
 		Profile = newprofile or self.Profile,
@@ -5624,6 +5634,7 @@ function mainapi:Uninject()
 	shared.vape = nil
 	shared.vapereload = nil
 	shared.VapeIndependent = nil
+	shared.bridgeloaded = nil
 end
 
 gui = Instance.new('ScreenGui')

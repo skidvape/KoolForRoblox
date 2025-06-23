@@ -764,3 +764,5 @@ run(function()
 		Tooltip = 'Automatically queues after the match ends.'
 	})
 end)
+
+shared.bridgeloaded = true
