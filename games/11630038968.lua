@@ -49,15 +49,12 @@ end
 run(function()
     bd.GetRemote = function(name: RemoteEvent | RemoteFunction): RemoteEvent | RemoteFunction
         local remote
-		task.spawn(function()
-			for _, v in pairs(game:GetDescendants()) do
-				if (v:IsA('RemoteEvent') or v:IsA('RemoteFunction')) and v.Name == name then
-					remote = v
-					break
-				end
+		for _, v in pairs(game:GetDescendants()) do
+			if (v:IsA('RemoteEvent') or v:IsA('RemoteFunction')) and v.Name == name then
+				remote = v
+				break
 			end
-		end)
-        if name == nil then return Instance.new('RemoteEvent') end
+		end
         return remote
     end
     bd.Remotes = {
