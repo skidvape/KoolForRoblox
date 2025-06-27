@@ -494,7 +494,7 @@ run(function()
 			whitelist.oldchattable = msgtable
 		end
 
-		oldchat = hookfunction(func, function(data, ...)
+		--[[oldchat = hookfunction(func, function(data, ...)
 			local plr = playersService:GetPlayerByUserId(data.SpeakerUserId)
 			if plr then
 				data.ExtraData.Tags = data.ExtraData.Tags or {}
@@ -510,7 +510,8 @@ run(function()
 
 		vape:Clean(function()
 			hookfunction(func, oldchat)
-		end)
+		end)]]
+		notiy('Vape', 'bad exec: get a good exec to support tags', 4, 'alert')
 	end
 
 	function whitelist:hook()
@@ -537,7 +538,7 @@ run(function()
 				end))
 			end
 		elseif replicatedStorage:FindFirstChild('DefaultChatSystemChatEvents') then
-			pcall(function()
+			--[[pcall(function()
 				for _, v in getconnections(replicatedStorage.DefaultChatSystemChatEvents.OnNewMessage.OnClientEvent) do
 					if v.Function and table.find(debug.getconstants(v.Function), 'UpdateMessagePostedInChannel') then
 						whitelist:oldchat(v.Function)
@@ -551,7 +552,8 @@ run(function()
 						break
 					end
 				end
-			end)
+			end)]]
+			notif('Vape', 'bad exec moment', 7, 'alert')
 		end
 
 		if exp then
@@ -1259,7 +1261,7 @@ run(function()
 				CircleObject.Visible = callback and Mode.Value == 'Mouse'
 			end
 			if callback then
-				if Method.Value == 'Ray' then
+				--[[if Method.Value == 'Ray' then
 					oldray = hookfunction(Ray.new, function(origin, direction)
 						if checkcaller() then
 							return oldray(origin, direction)
@@ -1301,7 +1303,7 @@ run(function()
 						end
 						return oldnamecall(self, unpack(args))
 					end)
-				end
+				end]]
 
 				repeat
 					if CircleObject then
@@ -1340,13 +1342,13 @@ run(function()
 					task.wait()
 				until not SilentAim.Enabled
 			else
-				if oldnamecall then
+				--[[if oldnamecall then
 					hookmetamethod(game, '__namecall', oldnamecall)
 				end
 				if oldray then
 					hookfunction(Ray.new, oldray)
 				end
-				oldnamecall, oldray = nil, nil
+				oldnamecall, oldray = nil, nil]]
 			end
 		end,
 		ExtraText = function()
@@ -6160,10 +6162,12 @@ run(function()
 					end
 				elseif replicatedStorage:FindFirstChild('DefaultChatSystemChatEvents') then
 					if Hide.Enabled then
-						oldchat = hookfunction(getconnections(replicatedStorage.DefaultChatSystemChatEvents.OnNewSystemMessage.OnClientEvent)[1].Function, function(data, ...)
+						--[[oldchat = hookfunction(getconnections(replicatedStorage.DefaultChatSystemChatEvents.OnNewSystemMessage.OnClientEvent)[1].Function, function(data, ...)
 							if data.Message:find('ChatFloodDetector') then return end
 							return oldchat(data, ...)
-						end)
+						end)]]
+						Hide:Toggle()
+						notif('Vape', 'bad exec moment', 5, 'alert')
 					end
 				else
 					notif('ChatSpammer', 'unsupported chat', 5, 'warning')
@@ -6188,9 +6192,9 @@ run(function()
 					task.wait(Delay.Value)
 				until not ChatSpammer.Enabled
 			else
-				if oldchat then
+				--[[if oldchat then
 					hookfunction(getconnections(replicatedStorage.DefaultChatSystemChatEvents.OnNewSystemMessage.OnClientEvent)[1].Function, oldchat)
-				end
+				end]]
 			end
 		end,
 		Tooltip = 'Automatically types in chat'
@@ -6222,7 +6226,7 @@ run(function()
 	})
 end)
 	
-run(function()
+--[[run(function()
 	local Disabler
 	
 	local function characterAdded(char)
@@ -6246,7 +6250,7 @@ run(function()
 		end,
 		Tooltip = 'Disables GetPropertyChangedSignal detections for movement'
 	})
-end)
+end)]]
 	
 run(function()
 	vape.Categories.Utility:CreateModule({
@@ -6514,7 +6518,7 @@ run(function()
 	})
 end)
 	
-run(function()
+--[[run(function()
 	local connections = {}
 	
 	vape.Categories.World:CreateModule({
@@ -6534,7 +6538,7 @@ run(function()
 		end,
 		Tooltip = 'Lets you stay ingame without getting kicked'
 	})
-end)
+end)]]
 	
 run(function()
 	local Freecam
@@ -6545,14 +6549,14 @@ run(function()
 		Name = 'Freecam',
 		Function = function(callback)
 			if callback then
-				repeat
+				--[[repeat
 					task.wait(0.1)
 					for _, v in getconnections(gameCamera:GetPropertyChangedSignal('CameraType')) do
 						if v.Function then
 							module = debug.getupvalue(v.Function, 1)
 						end
 					end
-				until module or not Freecam.Enabled
+				until module or not Freecam.Enabled]]
 	
 				if module and module.activeCameraController and Freecam.Enabled then
 					old = module.activeCameraController.GetSubjectPosition
@@ -8001,3 +8005,5 @@ run(function()
 		end
 	})
 end)
+
+notif('Vape', 'Your executor is limited to some features', 3, 'alert')

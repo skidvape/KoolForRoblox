@@ -1,5 +1,5 @@
 -- bridge duels (cheat engine!!)
-local run = function(func) pcall(func) end
+local run = function(func) func() end
 local cloneref = cloneref or function(obj) return obj end
 
 local playersService = cloneref(game:GetService('Players'))
@@ -55,6 +55,7 @@ run(function()
 				break
 			end
 		end
+		if name == nil then Instance.new('RemoteEvent', name) end
         return remote
     end
     bd.Remotes = {
@@ -566,7 +567,7 @@ run(function()
 	})
 end)
 
-run(function()
+--[[run(function()
 	local Scaffold
 	local Expand
 	local Tower
@@ -741,7 +742,7 @@ run(function()
 		Default = true
 	})
 	LimitItem = Scaffold:CreateToggle({Name = 'Limit to items'})
-end)
+end)]]
 
 run(function()
 	local AutoPlay
@@ -765,4 +766,24 @@ run(function()
 	})
 end)
 
-shared.bridgeloaded = true
+--[[run(function()
+	local AutoWin
+	local path = replicatedStorage.Modules.ServerData.Cache
+	local jsonPath = httpService:JSONDecode(path.Value)
+	AutoWin = vape.Categories.Utility:CreateModule({
+		Name = 'AutoWin',
+		Function = function(callback)
+			if callback then
+				repeat
+					if jsonPath.Submode == 'Playground' then return end
+
+					if lplr.PlayerGui.Hotbar.MainFrame.GameEndFrame.Visible == true and lplr.PlayerGui.Hotbar.MainFrame.MatchmakingFrame.Visible == false then
+						bd.Remotes.EnterQueue:InvokeServer(jsonPath.Submode)
+					end
+					task.wait()
+				until not AutoWin.Enabled
+			end
+		end,
+		Tooltip = 'Automatically wins for you in Bridge'
+	})
+end)]]
