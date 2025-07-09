@@ -204,7 +204,7 @@ run(function()
                             continue
                         end
                         if v.Transparency <= 0.1 and entitylib.isAlive then
-                            firetouchinterest(entitylib.character.RootPart, v, 1)
+                            firetouchinterest(entitylib.character.RootPart, v, 2)
                         end
                     end
                 end
