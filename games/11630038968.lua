@@ -1,4 +1,10 @@
--- bridge duels (cheat engine!!)
+--[[
+
+    kool.aid -->> Bridge Duels (cheat engine)
+    by @stav and @7GrandDadPGN
+
+]]
+
 local run = function(func) func() end
 local cloneref = cloneref or function(obj) return obj end
 
