@@ -286,20 +286,20 @@ run(function()
         Name = 'Godmode',
         Function = function(callback)
             if callback then
-                pcall(function()
-                    for _, v in game:GetDescendants() do
+                for _, v in game:GetDescendants() do
+                    pcall(function()
                         if v.Name == 'Kill' then
                             if v.TouchInterest then
                                 v.TouchInterest:Destroy()
                             end
                         end
-                    end
-                end)
+                    end)
+                end
             else
                 notif('Vape', 'Godmode will be disabled the next time you rejoin', 7)
             end
         end,
-        Tooltip = 'Prevents you from dying to kill-bricks'
+        Tooltip = 'Prevents you from dying'
     })
 end)
 
