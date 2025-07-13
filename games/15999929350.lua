@@ -26,7 +26,7 @@ local function notif(...)
 	return vape:CreateNotification(...)
 end
 
-local firepart = function(plr: Instance, item: Instance, tog: number): Instance, number
+local firepart = function(plr: Instance, item: Instance, tog: number): Instance
     task.spawn(function()
         if tog == 0 or tog > 1 then return end
 
