@@ -300,6 +300,7 @@ run(function()
                                             replicatedStorage.Remotes.DamageBlock:InvokeServer(v, i)
                                         end
                                     end)
+                                    
                                     break
                                 end
                             end
