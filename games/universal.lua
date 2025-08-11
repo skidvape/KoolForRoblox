@@ -6973,9 +6973,11 @@ end)
 run(function()
     local AutoCorrect
     local blacklistedwords = {
+		'hax',
         'hack',
-        'hax',
-        'cheat'
+		'hacks',
+        'cheat',
+		'hackers'
     }
 
     local function getWord(msg)
