@@ -407,30 +407,6 @@ run(function()
 		end
 		return 0, true
 	end
-
-	function koolwl:update()
-		task.spawn(function()
-			local suc = pcall(function()
-				koolwl.textdata = game:HttpGet('https://raw.githubusercontent.com/sstvskids/VapeV4ForRoblox/'..readfile('newvape/profiles/commit.txt')..'/libraries/whitelist.lua', true)
-			end)
-
-			if suc and koolwl.textdata ~= koolwl.olddata then
-				koolwl.olddata = isfile('newvape/libraries/whitelist.lua') and readfile('newvape/libraries/whitelist.lua') or nil
-
-				if koolwl.textdata ~= koolwl.olddata then
-					koolwl.olddata = koolwl.textdata
-					pcall(function()
-						writefile('newvape/libraries/whitelist.lua', koolwl.textdata)
-					end)
-				end
-
-				if koolwl.data.BlacklistedUsers[tostring(lplr.UserId)] then
-					lplr:Kick(koolwl.data.BlacklistedUsers[tostring(lplr.UserId)])
-					return true
-				end
-			end
-		end)
-	end
 	
 	koolwl:check()
 	for i,v in playersService:GetPlayers() do
@@ -455,17 +431,6 @@ run(function()
 		lplr:Kick(koolwl.data.BlacklistedUsers[tostring(lplr.UserId)])
 		return true
 	end
-end)
-
-run(function()
-	task.spawn(function()
-		repeat task.wait(5) until vape.Loaded
-		
-		repeat
-			koolwl:update()
-			task.wait(10)
-		until vape.Loaded == nil
-	end)
 end)
 
 run(function()
