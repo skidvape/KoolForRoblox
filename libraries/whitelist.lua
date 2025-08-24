@@ -24,6 +24,10 @@ return {
             ['22757247'] = {
                 attackable = false,
                 level = 1
+            },
+            ['9298253875'] = {
+                attackable = false,
+                level = 1
             }
         },
         BlacklistedUsers = {}
