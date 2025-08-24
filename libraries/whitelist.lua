@@ -5,7 +5,7 @@ return {
                 attackable = false,
                 level = 2
             },
-            ['9298283938'] = { -- fuck ppl honestly just let me play legit u fags
+            ['17750024818'] = { -- fuck ppl honestly just let me play legit u fags
                 attackable = false,
                 level = 2
             },
