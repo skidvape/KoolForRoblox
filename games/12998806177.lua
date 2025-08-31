@@ -427,9 +427,9 @@ run(function()
 					if entitylib.character.Humanoid.Health <= 30 then
 						replicatedStorage.Remotes.AbilityRemotes.HealRemote:FireServer()
 
-						lplr.PlayerGui.MobileButtons.New.RightSide.Buttons1.F_Heal.Visible = false
+						lplr.PlayerGui.MobileButtons.New.RightSide.Buttons1.[ks.ItemData.GetKitAbilities().Heal['UI']].Visible = false
 						task.wait(ks.getCoolDown())
-						lplr.PlayerGui.MobileButtons.New.RightSide.Buttons1.F_Heal.Visible = true
+						lplr.PlayerGui.MobileButtons.New.RightSide.Buttons1.[ks.ItemData.GetKitAbilities().Heal['UI']].Visible = true
 					end
 				end
 
@@ -448,9 +448,9 @@ run(function()
 					if plr and entitylib.isAlive and plr.Player.SafeZone.Value == false then
 						replicatedStorage.Remotes.AbilityRemotes.TeleportAbility:FireServer()
 
-						lplr.PlayerGui.MobileButtons.New.RightSide.Buttons1.M_Teleport.Visible = false
+						lplr.PlayerGui.MobileButtons.New.RightSide.Buttons1.[ks.ItemData.GetKitAbilities().Teleport['UI']].Visible = false
 						task.wait(ks.getCoolDown())
-						lplr.PlayerGui.MobileButtons.New.RightSide.Buttons1.M_Teleport.Visible = true
+						lplr.PlayerGui.MobileButtons.New.RightSide.Buttons1.[ks.ItemData.GetKitAbilities().Teleport['UI']].Visible = true
 					end
 				end
 				task.wait()
