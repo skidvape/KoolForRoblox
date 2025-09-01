@@ -160,7 +160,7 @@ run(function()
                         end
 
 						if AttackDelay < tick() and Mode.Value == 'Remote' then
-							AttackDelay = tick() + 0.165
+							AttackDelay = tick() + 0.17
 							if next(args) then
 								replicatedStorage.Remotes.Hit:FireServer(args)
 								args = {}
