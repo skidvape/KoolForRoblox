@@ -52,14 +52,14 @@ end
 local ks = {}
 
 run(function()
-	ks = {
+	ks = setmetatable({
 		ItemMeta = loadstring(downloadFile('newvape/games/itemmeta.lua'))(),
 		getCoolDown = function()
 			for _, v in ks.ItemData.GetKits().Cooldowns[lplr.GameStats.Kit.Value] do
 				return v
 			end
 		end
-	}
+	}, nil)
 end)
 
 for _, v in {'Reach', 'SilentAim', 'HitBoxes', 'MurderMystery', 'AutoRejoin', 'AutoClicker', 'ProfileInstaller', 'Killaura', 'AntiFall'} do
