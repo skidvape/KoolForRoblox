@@ -180,7 +180,7 @@ run(function()
 		Name = 'Reach',
 		Function = function(callback)
 			if callback then
-				vape:Clean(path:GetPropertyChangedSignal('Value'):Connect(function()
+				Reach:Clean(path:GetPropertyChangedSignal('Value'):Connect(function()
 					path.Value = Value.Value
 				end))
 				path.Value = Value.Value
