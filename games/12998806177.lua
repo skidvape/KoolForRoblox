@@ -62,7 +62,7 @@ run(function()
 	}, nil)
 end)
 
-for _, v in {'Reach', 'SilentAim', 'HitBoxes', 'MurderMystery', 'AutoRejoin', 'AutoClicker', 'ProfileInstaller', 'Killaura', 'AntiFall'} do
+for _, v in {'Reach', 'SilentAim', 'HitBoxes', 'MurderMystery', 'AutoRejoin', 'AutoClicker', 'ProfileInstaller'} do
 	vape:Remove(v)
 end
 
