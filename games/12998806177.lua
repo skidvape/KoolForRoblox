@@ -12,6 +12,12 @@ end
 local cloneref = cloneref or function(obj)
     return obj
 end
+local vapeEvents = setmetatable({}, {
+	__index = function(self, index)
+		self[index] = Instance.new('BindableEvent')
+		return self[index]
+	end
+})
 
 local playersService = cloneref(game:GetService('Players'))
 local starterPlayer = cloneref(game:GetService('StarterPlayer'))
@@ -21,6 +27,7 @@ local replicatedStorage = cloneref(game:GetService('ReplicatedStorage'))
 local collectionService = cloneref(game:GetService('CollectionService'))
 local runService = cloneref(game:GetService('RunService'))
 local starterGui = cloneref(game:GetService('StarterGui'))
+local textChatService = cloneref(game:GetService('TextChatService'))
 
 local gameCamera = workspace.CurrentCamera
 local lplr = playersService.LocalPlayer
@@ -60,14 +67,23 @@ run(function()
 			end
 		end
 	}, nil)
+	
+	for _, v in {'SetImportant'} do
+		if not vape.Connections then return end
+
+		vape:Clean(replicatedStorage.Remotes[v].Event:Connect(function(...)
+			vapeEvents[v]:Fire(...)
+		end))
+	end
 end)
 
 for _, v in {'Reach', 'SilentAim', 'HitBoxes', 'MurderMystery', 'AutoRejoin', 'AutoClicker', 'ProfileInstaller'} do
 	vape:Remove(v)
 end
 
+local Killaura
+local AutoToxicNme
 run(function()
-    local Killaura
     local Mode
     local Max
     local AttackRange
@@ -144,6 +160,8 @@ run(function()
 
                             if delta.Magnitude > AttackRange.Value then continue end
 							if AttackDelay < tick() then
+								AutoToxicNme = v.Player.Name
+
 								if Mode.Value == 'Mouse' then
 									AttackDelay = tick() + 0.11
 									virtualinputService:SendMouseButtonEvent(gameCamera.ViewportSize.X / 2, gameCamera.ViewportSize.Y / 2, 0, true, game, 0)
@@ -620,6 +638,78 @@ run(function()
 		end,
         Tooltip = 'Reduces knockback taken'
 	})
+end)
+
+run(function()
+	local AutoToxic
+	local Toggles, Lists, said, delay = {}, {}, {}
+	
+	local function sendMessage(name, obj, default)
+		local tab = Lists[name].ListEnabled
+		local custommsg = #tab > 0 and tab[math.random(1, #tab)] or default
+		if not custommsg then return end
+		if #tab > 1 and custommsg == said[name] then
+			repeat 
+				task.wait() 
+				custommsg = tab[math.random(1, #tab)] 
+			until custommsg ~= said[name]
+		end
+		said[name] = custommsg
+	
+		custommsg = custommsg and custommsg:gsub('<obj>', obj or '') or ''
+		if textChatService.ChatVersion == Enum.ChatVersion.TextChatService then
+			textChatService.ChatInputBarConfiguration.TargetTextChannel:SendAsync(custommsg)
+		else
+			replicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer(custommsg, 'All')
+		end
+	end
+	
+	AutoToxic = vape.Categories.Utility:CreateModule({
+		Name = 'AutoToxic',
+		Function = function(callback)
+			if callback then
+				AutoToxic:Clean(vapeEvents.SetImportant.Event:Connect(function(type, num)
+					if not Killaura.Enabled then return end
+
+					if type == 'KitMastery' and Toggles.Kill.Enabled and (not delay) then
+						delay = true
+						sendMessage('Kill', AutoToxicNme, 'kool.aid solos | <obj>')
+						task.delay(0.05, function()
+							delay = false
+							AutoToxicNme = 'self'
+						end)
+					end
+				end))
+
+				AutoToxic:Clean(entitylib.Events.LocalRemoved:Connect(function()
+					if not Killaura.Enabled then return end
+					
+					sendMessage('Death', AutoToxicNme, 'kool.aid ALWAYS comes back stronger <obj>')
+					task.delay(0.05, function()
+						AutoToxicNme = 'self'
+					end)
+				end))
+			else
+				AutoToxicNme = nil
+			end
+		end,
+		Tooltip = 'Says a message after a certain action'
+	})
+	for _, v in {'Kill', 'Death'} do
+		Toggles[v] = AutoToxic:CreateToggle({
+			Name = v..' ',
+			Function = function(callback)
+				if Lists[v] then
+					Lists[v].Object.Visible = callback
+				end
+			end
+		})
+		Lists[v] = AutoToxic:CreateTextList({
+			Name = v,
+			Darker = true,
+			Visible = false
+		})
+	end
 end)
 
 notif('Vape', 'Good things come to those who wait :)', 10)
