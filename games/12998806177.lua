@@ -594,6 +594,7 @@ run(function()
 
 							if lplr.SafeZone.Value == true or v.Player.SafeZone.Value == true then continue end
 							if lplr.Blocking.Value == true then continue end
+							if not Killaura.Enabled then continue end
 
 							entitylib.character.RootPart.CFrame = v.RootPart.CFrame + Vector3.new(0, 5, 0)
 						end
