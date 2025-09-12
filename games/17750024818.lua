@@ -756,7 +756,7 @@ end)
 
 local function haswl()
 	for _, v in playersService:GetPlayers() do
-		if self.data.WhitelistedUsers[lplr.UserId] then
+		if koolwl.data.WhitelistedUsers[lplr.UserId] then
 			return true
 		end
 	end
