@@ -407,16 +407,6 @@ run(function()
 		end
 		return 0, true
 	end
-
-	function koolwl:haswl()
-		for i,v in self.data.WhitelistedUsers do
-			if tostring(lplr.UserId) == i then
-				return true
-			end
-		end
-
-		return false
-	end
 	
 	koolwl:check()
 	for i,v in playersService:GetPlayers() do
