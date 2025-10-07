@@ -138,7 +138,7 @@ run(function()
 		end
 
 		if lplr:GetAttribute('PVP') then return true end
-		return false
+		return true
 	end
 end)
 
