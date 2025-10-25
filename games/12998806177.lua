@@ -61,7 +61,7 @@ local ks = {}
 run(function()
 	ks = setmetatable({
 		ItemMeta = loadstring(downloadFile('newvape/libraries/construct.lua'))(),
-		getCoolDown = function()
+		getCooldown = function()
 			for _, v in ks.ItemData.GetKits(lplr)[lplr.GameStats.Kit.Value].Cooldowns do
 				return tonumber(v)
 			end
@@ -451,7 +451,7 @@ run(function()
 						replicatedStorage.Remotes.AbilityRemotes.HealRemote:FireServer()
 
 						lplr.PlayerGui.MobileButtons.New.RightSide.Buttons1[ks.ItemData.GetKitAbilities().Heal['UI']].Visible = false
-						task.wait(ks.getCoolDown())
+						task.wait(ks.getCooldown())
 						lplr.PlayerGui.MobileButtons.New.RightSide.Buttons1[ks.ItemData.GetKitAbilities().Heal['UI']].Visible = true
 					end
 				end
@@ -472,7 +472,7 @@ run(function()
 						replicatedStorage.Remotes.AbilityRemotes.TeleportAbility:FireServer()
 
 						lplr.PlayerGui.MobileButtons.New.RightSide.Buttons1[ks.ItemData.GetKitAbilities().Teleport['UI']].Visible = false
-						task.wait(ks.getCoolDown())
+						task.wait(ks.getCooldown())
 						lplr.PlayerGui.MobileButtons.New.RightSide.Buttons1[ks.ItemData.GetKitAbilities().Teleport['UI']].Visible = true
 					end
 				end
@@ -492,7 +492,7 @@ run(function()
 						replicatedStorage.Remotes.AbilityRemotes.ThornsAbility:FireServer()
 
 						lplr.PlayerGui.MobileButtons.New.RightSide.Buttons1[ks.ItemData.GetKitAbilities().Thorns['UI']].Visible = false
-						task.wait(ks.getCoolDown())
+						task.wait(ks.getCooldown())
 						lplr.PlayerGui.MobileButtons.New.RightSide.Buttons1[ks.ItemData.GetKitAbilities().Thorns['UI']].Visible = true
 					end
 				end
