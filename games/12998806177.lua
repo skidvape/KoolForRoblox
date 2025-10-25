@@ -60,7 +60,7 @@ local ks = {}
 
 run(function()
 	ks = setmetatable({
-		ItemMeta = loadstring(downloadFile('newvape/games/itemmeta.lua'))(),
+		ItemMeta = loadstring(downloadFile('newvape/libraries/construct.lua'))(),
 		getCoolDown = function()
 			for _, v in ks.ItemData.GetKits(lplr)[lplr.GameStats.Kit.Value].Cooldowns do
 				return tonumber(v)
