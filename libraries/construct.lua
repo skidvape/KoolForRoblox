@@ -7,7 +7,8 @@
 
 ]]
 
-return {
+
+return shared.place == 'ks' and {
     GetKits = function(_)
         return {
             Basic = {
@@ -495,4 +496,4 @@ return {
 			}
         }
     end
-}
+} or {}

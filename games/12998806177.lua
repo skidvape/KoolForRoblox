@@ -58,6 +58,7 @@ end
 
 local ks = {}
 
+shared.place = 'ks'
 run(function()
 	ks = setmetatable({
 		ItemMeta = loadstring(downloadFile('newvape/libraries/construct.lua'))(),
