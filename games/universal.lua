@@ -564,7 +564,6 @@ run(function()
 		vape:Clean(function()
 			hookfunction(func, oldchat)
 		end)]]
-		notif('Vape', 'bad exec: get a good exec to support tags', 4, 'alert')
 	end
 
 	function whitelist:hook()
