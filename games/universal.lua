@@ -542,12 +542,12 @@ run(function()
 	end
 
 	function whitelist:oldchat(func)
-		local msgtable, oldchat = debug.getupvalue(func, 3)
+		--[[local msgtable, oldchat = debug.getupvalue(func, 3)
 		if typeof(msgtable) == 'table' and msgtable.CurrentChannel then
 			whitelist.oldchattable = msgtable
 		end
 
-		--[[oldchat = hookfunction(func, function(data, ...)
+		oldchat = hookfunction(func, function(data, ...)
 			local plr = playersService:GetPlayerByUserId(data.SpeakerUserId)
 			if plr then
 				data.ExtraData.Tags = data.ExtraData.Tags or {}
@@ -564,7 +564,7 @@ run(function()
 		vape:Clean(function()
 			hookfunction(func, oldchat)
 		end)]]
-		notiy('Vape', 'bad exec: get a good exec to support tags', 4, 'alert')
+		notif('Vape', 'bad exec: get a good exec to support tags', 4, 'alert')
 	end
 
 	function whitelist:hook()
