@@ -1,7 +1,7 @@
 --[[
 
     kool.aid -->> Bridge Duels (cheat engine)
-    by @stav and @7GrandDadPGN
+    by @stav and @7GrandDadPGN (xylex)
 
 ]]
 
@@ -12,7 +12,6 @@ local playersService = cloneref(game:GetService('Players'))
 local inputService = cloneref(game:GetService('UserInputService'))
 local replicatedStorage = cloneref(game:GetService('ReplicatedStorage'))
 local collectionService = cloneref(game:GetService('CollectionService'))
-local httpService = cloneref(game:GetService('HttpService'))
 local runService = cloneref(game:GetService('RunService'))
 
 local gameCamera = workspace.CurrentCamera
@@ -53,25 +52,9 @@ local function parsePositions(v, func)
 end
 
 run(function()
-    bd.GetRemote = function(name: RemoteEvent | RemoteFunction): RemoteEvent | RemoteFunction
-        local remote
-		for _, v in pairs(game:GetDescendants()) do
-			if (v:IsA('RemoteEvent') or v:IsA('RemoteFunction')) and v.Name == name then
-				remote = v
-				break
-			end
-		end
-		if name == nil then Instance.new('RemoteEvent', name) end
-        return remote
-    end
-    bd.Remotes = {
-        AttackPlayer = bd.GetRemote('AttackPlayerWithSword'),
-		BlockSword = bd.GetRemote('ToggleBlockSword'),
-		EnterQueue = bd.GetRemote('EnterQueue'),
-        PlaceBlock = bd.GetRemote('PlaceBlock')
-    }
+	bd = loadstring(downloadFile('newvape/libraries/construct.lua'))()
 
-    task.spawn(function()
+	task.spawn(function()
 		local map = workspace:WaitForChild('Map', 99999)
 		if map and vape.Loaded ~= nil then
 			vape:Clean(map.DescendantAdded:Connect(function(v)
@@ -101,6 +84,10 @@ run(function()
 		table.clear(store)
 	end)
 end)
+
+for _, v in {'Reach', 'SilentAim', 'Disabler', 'HitBoxes', 'MurderMystery', 'AutoRejoin'} do
+	vape:Remove(v)
+end
 
 run(function()
 	local oldstart = entitylib.start
@@ -137,11 +124,7 @@ run(function()
 		end
 	end
 end)
-
 entitylib.start()
-for _, v in {'Reach', 'SilentAim', 'Disabler', 'HitBoxes', 'MurderMystery', 'AutoRejoin'} do
-	vape:Remove(v)
-end
 
 run(function()
 	local AutoClicker
@@ -170,22 +153,25 @@ run(function()
 		DefaultMax = 12
 	})
 end)
-
+	
 run(function()
 	local Reach
-	local path = replicatedStorage.Constants.Melee.Reach
 	local Value
+	local old
 	
 	Reach = vape.Categories.Combat:CreateModule({
 		Name = 'Reach',
 		Function = function(callback)
 			if callback then
-				Reach:Clean(path:GetPropertyChangedSignal('Value'):Connect(function()
-					path.Value = Value.Value
+				old = bd.CombatConstants.REACH_IN_STUDS.Value
+
+                Reach:Clean(bd.CombatConstants.REACH_IN_STUDS:GetPropertyChangedSignal('Value'):Connect(function()
+					bd.CombatConstants.REACH_IN_STUDS.Value = Value.Value
 				end))
-				path.Value = Value.Value
+				bd.CombatConstants.REACH_IN_STUDS.Value = Value.Value
 			else
-				path.Value = 9
+				bd.CombatConstants.REACH_IN_STUDS.Value = old
+				old = nil
 			end
 		end,
 		Tooltip = 'Extends tool attack reach'
@@ -198,26 +184,20 @@ run(function()
 		Decimal = 10,
 		Suffix = function(val) 
 			return val == 1 and 'stud' or 'studs' 
-		end
+		end,
+        Function = function(val)
+            bd.CombatConstants.REACH_IN_STUDS.Value = val
+        end
 	})
 end)
-
-local Criticals
-run(function()
-	Criticals = vape.Categories.Blatant:CreateModule({
-		Name = 'Criticals',
-		Tooltip = 'Always hit criticals'
-	})
-end)
-
+	
 run(function()
 	vape.Categories.Combat:CreateModule({
 		Name = 'Velocity',
 		Function = function(callback)
 			if callback then
 				pcall(function()
-					local old = replicatedStorage.Modules.Knit.Services.CombatService.RE.KnockBackApplied
-					old:Destroy()
+					bd.CombatConstants.KnockBackApplied:Destroy()
 				end)
 			else
 				notif('Vape', 'Velocity will be disabled next game.', 7)
@@ -227,23 +207,14 @@ run(function()
 	})
 end)
 
+local Criticals = {Enabled = false}
 run(function()
-	local NoFall
-	NoFall = vape.Categories.Blatant:CreateModule({
-		Name = 'NoFall',
-		Function = function(callback)
-			if callback then
-				repeat task.wait()
-					if entitylib.character.Humanoid.FloorMaterial == Enum.Material.Air and (entitylib.character.Humanoid:GetState() == Enum.HumanoidStateType.Freefall or entitylib.character.Humanoid:GetState() == Enum.HumanoidStateType.FallingDown) then
-						entitylib.character.Humanoid:ChangeState(Enum.HumanoidStateType.Landed)
-					end
-				until not NoFall.Enabled
-			end
-		end,
-		Tooltip = 'Prevents taking fall damage.'
+	Criticals = vape.Categories.Blatant:CreateModule({
+		Name = 'Criticals',
+		Tooltip = 'Always hit criticals (with KillAura on)'
 	})
 end)
-
+	
 run(function()
 	local Killaura
 	local Targets
@@ -252,9 +223,11 @@ run(function()
 	local AttackRange
 	local SwingRange
 	local AngleSlider
-	local AutoBlock 
+	local AutoBlock
 	local Mouse
 	local Swing
+	local Block
+	local Max
 	local BoxSwingColor
 	local BoxAttackColor
 	local ParticleTexture
@@ -262,7 +235,6 @@ run(function()
 	local ParticleColor2
 	local ParticleSize
 	local LegitAura
-	local Max
 	local Particles, Boxes, AttackDelay, SwingDelay, ClickDelay = {}, {}, tick(), tick(), tick()
 	
 	local function getAttackData()
@@ -278,7 +250,7 @@ run(function()
 
 	local function blockSword(bool: boolean, sword: string)
 		task.spawn(function()
-			return bd.Remotes.BlockSword:InvokeServer(bool, sword)
+			return bd.ToolService:ToggleBlockSword(bool, sword)
 		end)
 	end
 	
@@ -286,7 +258,7 @@ run(function()
 		Name = 'Killaura',
 		Function = function(callback)
 			if callback then
-				if LegitAura and LegitAura.Enabled then
+				if LegitAura.Enabled then
 					Killaura:Clean(inputService.InputBegan:Connect(function(input)
 						if input.UserInputType == Enum.UserInputType.MouseButton1 then
 							ClickDelay = tick() + 0.1
@@ -306,7 +278,7 @@ run(function()
 							NPCs = Targets.NPCs.Enabled,
 							Limit = Max.Value
 						})
-	
+		
 						task.spawn(function()
 							if #plrs > 0 then
 								local selfpos = entitylib.character.RootPart.Position
@@ -326,17 +298,25 @@ run(function()
 											Check = delta.Magnitude > AttackRange.Value and BoxSwingColor or BoxAttackColor
 										})
 										targetinfo.Targets[v] = tick() + 1
-			
-										if not Swing.Enabled and SwingDelay < tick() and (tool and tool:HasTag('Sword')) then
+				
+										if not Swing.Enabled and SwingDelay < tick() then
 											SwingDelay = tick() + 0.25
-											lplr.Character.Humanoid.Animator:LoadAnimation(getTool().Animations.Swing):Play()
+											entitylib.character.Humanoid.Animator:LoadAnimation(tool.Animations.Swing):Play()
+			
+											if vape.ThreadFix then
+												setthreadidentity(2)
+											end
+											bd.ViewmodelController:PlayAnimation(tool.Name)
+											if vape.ThreadFix then
+												setthreadidentity(8)
+											end
 										end
 				
 										if delta.Magnitude > AttackRange.Value then continue end
 										if AttackDelay < tick() then
 											AttackDelay = (CPSToggle.Enabled and tick() + (1 / CPS.GetRandomValue())) or 0
 											task.spawn(function()
-												bd.Remotes.AttackPlayer:InvokeServer(v.Character, (Criticals.Enabled and true) or entitylib.character.RootPart.AssemblyLinearVelocity.Y < 0, tool.Name)
+												bd.ToolService:AttackPlayerWithSword(v.Character, (Criticals.Enabled and true) or entitylib.character.RootPart.AssemblyLinearVelocity.Y < 0, tool.Name)
 											end)
 										end
 									end
@@ -346,7 +326,7 @@ run(function()
 							end
 						end)
 					end
-		
+	
 					for i, v in Boxes do
 						v.Adornee = attacked[i] and attacked[i].Entity.RootPart or nil
 						if v.Adornee then
@@ -354,18 +334,16 @@ run(function()
 							v.Transparency = 1 - attacked[i].Check.Opacity
 						end
 					end
-					
+	
 					for i, v in Particles do
 						v.Position = attacked[i] and attacked[i].Entity.RootPart.Position or Vector3.new(9e9, 9e9, 9e9)
 						v.Parent = attacked[i] and gameCamera or nil
 					end
-					
+	
 					task.wait()
 				until not Killaura.Enabled
 			else
-				if AutoBlock.Enabled then
-					blockSword(false, getTool().Name)
-				end
+				blockSword(false, getAttackData().Name)
 				for _, v in Boxes do
 					v.Adornee = nil
 				end
@@ -374,10 +352,7 @@ run(function()
 				end
 			end
 		end,
-		Tooltip = 'Attack players around you\nwithout aiming at them.',
-		ExtraText = function()
-			return 'Single'
-		end
+		Tooltip = 'Attack players around you\nwithout aiming at them.'
 	})
 	Targets = Killaura:CreateTargets({Players = true})
 	CPSToggle = Killaura:CreateToggle({
@@ -431,6 +406,7 @@ run(function()
 	})
 	Mouse = Killaura:CreateToggle({Name = 'Require mouse down'})
 	Swing = Killaura:CreateToggle({Name = 'No Swing'})
+	Block = Killaura:CreateToggle({Name = 'No Block'})
 	Killaura:CreateToggle({
 		Name = 'Show target',
 		Function = function(callback)
@@ -572,8 +548,47 @@ run(function()
 		Tooltip = 'Only attacks while swinging manually'
 	})
 end)
+	
+run(function()
+	local NoFall
+	NoFall = vape.Categories.Blatant:CreateModule({
+		Name = 'NoFall',
+		Function = function(callback)
+			if callback then
+				repeat
+					if entitylib.character.Humanoid.FloorMaterial == Enum.Material.Air and (entitylib.character.Humanoid:GetState() == Enum.HumanoidStateType.Freefall or entitylib.character.Humanoid:GetState() == Enum.HumanoidStateType.FallingDown) then
+						entitylib.character.Humanoid:ChangeState(Enum.HumanoidStateType.Landed)
+					end
 
---[[run(function()
+					task.wait()
+				until not NoFall.Enabled
+			end
+		end,
+		Tooltip = 'Prevents taking fall damage.'
+	})
+end)
+	
+run(function()
+	local AutoPlay
+	local Delay
+	
+	AutoPlay = vape.Categories.Utility:CreateModule({
+		Name = 'AutoPlay',
+		Function = function(callback)
+			if callback then
+				repeat
+					if bd.ServerData.Submode ~= 'Playground' and lplr.PlayerGui.Hotbar.MainFrame.GameEndFrame.Visible == true and lplr.PlayerGui.Hotbar.MainFrame.MatchmakingFrame.Visible == false then
+						bd.MatchController:EnterQueue(bd.ServerData.Submode)
+					end
+					task.wait()
+				until not AutoPlay.Enabled
+			end
+		end,
+		Tooltip = 'Automatically queues after the match ends.'
+	})
+end)
+	
+run(function()
 	local Scaffold
 	local Expand
 	local Tower
@@ -687,39 +702,25 @@ end)
 										end
 									end
 								end
-
-								pcall(function()
-									local block = store.blocks[currentpos]
-									if not block then
-										blockpos = checkAdjacent(currentpos) and currentpos or blockProximity(currentpos)
-										if blockpos then
-											local fake = replicatedStorage.Assets.Blocks[btype]:Clone()
-											fake.Name = 'TempBlock'
-											fake.Position = blockpos
-											fake:AddTag('TempBlock')
-											fake:AddTag('Block')
-											fake.Parent = workspace.Map
-											--bd.EffectsController:PlaySound(blockpos)
-											bd.Entity.LocalEntity:RemoveTool(bname, 1)
-		
-											task.spawn(function()
-												local suc, block = bd.Remotes.PlaceBlock:InvokeServer({
-													position = blockpos,
-													block_type = btype,
-													extra = {
-														rizz = 'No.',
-														sigma = 'The...',
-														those = workspace.Name == 'Ok'
-													}
-												})
-												fake:Destroy()
-												if not (suc or block) then
-													bd.Entity.LocalEntity:AddTool(bname, 1)
-												end
-											end)
-										end
+	
+								local block = store.blocks[currentpos]
+								if not block then
+									blockpos = checkAdjacent(currentpos) and currentpos or blockProximity(currentpos)
+									if blockpos then
+										local fake = replicatedStorage.Assets.Blocks[btype]:Clone()
+										fake.Name = 'TempBlock'
+										fake.Position = blockpos
+										fake:AddTag('TempBlock')
+										fake:AddTag('Block')
+										fake.Parent = workspace.Map
+										bd.EffectsController:PlaySound(fake.Position)
+	
+										task.spawn(function()
+											bd.ToolService:PlaceBlock(fake.Position)
+											fake:Destroy()
+										end)
 									end
-								end)
+								end
 								lastpos = currentpos
 							end
 						end
@@ -748,48 +749,4 @@ end)
 		Default = true
 	})
 	LimitItem = Scaffold:CreateToggle({Name = 'Limit to items'})
-end)]]
-
-run(function()
-	local AutoPlay
-	local path = replicatedStorage.Modules.ServerData.Cache
-	local jsonPath = httpService:JSONDecode(path.Value)
-	AutoPlay = vape.Categories.Utility:CreateModule({
-		Name = 'AutoPlay',
-		Function = function(callback)
-			if callback then
-				repeat
-					if jsonPath.Submode == 'Playground' then return end
-
-					if lplr.PlayerGui.Hotbar.MainFrame.GameEndFrame.Visible == true and lplr.PlayerGui.Hotbar.MainFrame.MatchmakingFrame.Visible == false then
-						bd.Remotes.EnterQueue:InvokeServer(jsonPath.Submode)
-					end
-					task.wait()
-				until not AutoPlay.Enabled
-			end
-		end,
-		Tooltip = 'Automatically queues after the match ends.'
-	})
 end)
-
---[[run(function()
-	local AutoWin
-	local path = replicatedStorage.Modules.ServerData.Cache
-	local jsonPath = httpService:JSONDecode(path.Value)
-	AutoWin = vape.Categories.Utility:CreateModule({
-		Name = 'AutoWin',
-		Function = function(callback)
-			if callback then
-				repeat
-					if jsonPath.Submode == 'Playground' then return end
-
-					if lplr.PlayerGui.Hotbar.MainFrame.GameEndFrame.Visible == true and lplr.PlayerGui.Hotbar.MainFrame.MatchmakingFrame.Visible == false then
-						bd.Remotes.EnterQueue:InvokeServer(jsonPath.Submode)
-					end
-					task.wait()
-				until not AutoWin.Enabled
-			end
-		end,
-		Tooltip = 'Automatically wins for you in Bridge'
-	})
-end)]]
