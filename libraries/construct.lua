@@ -562,7 +562,7 @@ else
 				return replicatedStorage.Modules.Knit.Services.ToolService.RF.ToggleBlockSword:InvokeServer(tog, tool)
 			end,
 			AttackPlayerWithSword = function(self, character, crit, tool)
-				return replicatedStorage.Modules.Knit.Services.ToolService.RF.AttackPlayerWithSword:InvokeServer(character, crit, tool, "'")
+				return replicatedStorage.Modules.Knit.Services.ToolService.RF.AttackPlayerWithSword:InvokeServer(character, crit, tool)
 			end,
 			PlaceBlock = function(self, blockpos)
 				return replicatedStorage.Modules.Knit.Services.ToolService.RF.PlaceBlock:InvokeServer(blockpos)
