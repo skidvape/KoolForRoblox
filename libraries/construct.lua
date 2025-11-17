@@ -13,6 +13,22 @@ end
 local replicatedStorage = cloneref(game:GetService('ReplicatedStorage'))
 local httpService = cloneref(game:GetService('HttpService'))
 
+local function downloadFile(path, func)
+	if not isfile(path) then
+		local suc, res = pcall(function()
+			return game:HttpGet('https://raw.githubusercontent.com/skidvape/KoolForRoblox/'..readfile('newvape/profiles/commit.txt')..'/'..select(1, path:gsub('newvape/', '')), true)
+		end)
+		if not suc or res == '404: Not Found' then
+			error(res)
+		end
+		if path:find('.lua') then
+			res = '--This watermark is used to delete the file if its cached, remove it to make the file persist after vape updates.\n'..res
+		end
+		writefile(path, res)
+	end
+	return (func or readfile)(path)
+end
+
 if shared.place == 'ks' then
 	return {
 		GetKits = function(_)
@@ -522,11 +538,33 @@ else
 	}
 
 	return {
+		Blink = loadstring(downloadFile('newvape/libraries/blink.lua'))(),
+		BreakTimes = {
+			Bed = 0.3,
+			Clay = 1.8,
+			WoodPlanks = 3,
+			Stone = 5,
+			Bricks = 8,
+			Iron = 13,
+			Diamond = 25,
+			TNT = 999
+		},
 		CombatService = {
 			KnockBackApplied = replicatedStorage.Modules.Knit.Services.CombatService.RE:FindFirstChild('KnockBackApplied')
 		},
 		CombatConstants = {
 			REACH_IN_STUDS = replicatedStorage.Constants.Melee.Reach
+		},
+		Entity = {
+			FindByCharacter = function(char)
+				for _, v in replicatedStorage.Modules.Knit.Services.EntityService.RF.GetEntities:InvokeServer() do
+					if v.Character == char then
+						return v
+					end
+				end
+
+				return nil
+			end
 		},
 		EffectsController = {
 			PlaySound = function(self, pos)
