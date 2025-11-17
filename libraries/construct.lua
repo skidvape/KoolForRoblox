@@ -12,6 +12,8 @@ local cloneref = cloneref or function(obj)
 end
 local replicatedStorage = cloneref(game:GetService('ReplicatedStorage'))
 local httpService = cloneref(game:GetService('HttpService'))
+local playersService = cloneref(game:GetService('Players'))
+local lplr = playersService.LocalPlayer
 
 local function downloadFile(path, func)
 	if not isfile(path) then
@@ -537,7 +539,7 @@ else
 		Hammer = 25
 	}
 
-	return {
+	local bd = {
 		Blink = loadstring(downloadFile('newvape/libraries/blink.lua'))(),
 		BreakTimes = {
 			Bed = 0.3,
@@ -556,6 +558,15 @@ else
 			REACH_IN_STUDS = replicatedStorage.Constants.Melee.Reach
 		},
 		Entity = {
+			FindByPlayer = function(plr)
+				for _, v in replicatedStorage.Modules.Knit.Services.EntityService.RF.GetEntities:InvokeServer() do
+					if v.Player == plr then
+						return v
+					end
+				end
+
+				return nil
+			end,
 			FindByCharacter = function(char)
 				for _, v in replicatedStorage.Modules.Knit.Services.EntityService.RF.GetEntities:InvokeServer() do
 					if v.Character == char then
@@ -678,4 +689,7 @@ else
 			end
 		}
 	}
+
+	bd.Entity.LocalEntity = bd.Entity.FindByPlayer(lplr)
+	return bd
 end
