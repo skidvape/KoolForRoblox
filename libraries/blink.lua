@@ -1,7 +1,6 @@
 -- volcano.wtf for dumper (i'm not bothered to rewrite this, it works fine)
 -- Decompiled by Medal, I take no credit I only Made The dumper and I I.. I iron man
 
-
 local v1 = game:GetService("ReplicatedStorage")
 local v2 = game:GetService("RunService")
 local v_u_3 = 0
