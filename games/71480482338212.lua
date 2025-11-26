@@ -116,6 +116,30 @@ local function isFriend(plr, recolor)
 	return nil
 end
 
+run(function()
+	entitylib.targetCheck = function(ent)
+		if ent.TeamCheck then
+			return ent:TeamCheck()
+		end
+		if ent.NPC then return true end
+		if isFriend(ent.Player) then return false end
+		if not (select(2, whitelist:get(ent.Player)) or select(2, koolwl:get(ent.Player.UserId))) then return false end
+        if not ent.Player:GetAttribute('PVP') or not lplr:GetAttribute('PVP') then return false end
+
+        if vape.Categories.Main.Options['Teams by server'].Enabled then
+			if not lplr.Team then return true end
+			if not ent.Player.Team then return true end
+			if (tostring(ent.Player.Team) and tostring(lplr.Team)) == 'Spectators' then return true end
+			if ent.Player.Team ~= lplr.Team then return true end
+			return #ent.Player.Team:GetPlayers() == #playersService:GetPlayers()
+		end
+
+		return false
+	end
+end)
+
+entitylib.start()
+
 for _, v in {'Reach', 'SilentAim', 'Disabler', 'HitBoxes', 'MurderMystery', 'AutoRejoin', 'AutoClicker', 'ProfileInstaller'} do
 	vape:Remove(v)
 end
