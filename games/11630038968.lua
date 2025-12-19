@@ -180,13 +180,11 @@ run(function()
 		Function = function(callback)
 			if callback then
 				old = bd.CombatConstants.REACH_IN_STUDS.Value
-
-                Reach:Clean(bd.CombatConstants.REACH_IN_STUDS:GetPropertyChangedSignal('Value'):Connect(function()
-					bd.CombatConstants.REACH_IN_STUDS.Value = Value.Value
-				end))
 				bd.CombatConstants.REACH_IN_STUDS.Value = Value.Value
+				rawset(bd.Entity.LocalEntity, 'Reach', Value.Value)
 			else
 				bd.CombatConstants.REACH_IN_STUDS.Value = old
+				rawset(bd.Entity.LocalEntity, 'Reach', old)
 				old = nil
 			end
 		end,
