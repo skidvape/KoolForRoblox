@@ -337,7 +337,7 @@ run(function()
 														weapon_name = tool.Name,
 														extra = {
 															rizz = 'Bro.',
-															owo = 'What\'s this? OwO',
+															owo = 'What\'s this? OwO ',
 															those = workspace.Name == 'Ok'
 														}
 													})
