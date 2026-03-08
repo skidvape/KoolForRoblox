@@ -666,14 +666,8 @@ else
 							self.SwordBlocked = tog
 							if tog then
 								mainpart.C1 = CFrame.new(-1.2, -0.5, 0) * CFrame.fromOrientation(-0.7853981633974483, 2.2689280275926285, -1.0471975511965976)
-								if tool ~= 'Hammer' then
-									self:GetContainer().Viewmodel[tool].MainPart.Mesh.Scale = Vector3.new(2.8, 5, 0.3)
-								end
 							else
 								mainpart.C1 = CFrame.new(0, 0.5, 0) * CFrame.fromOrientation(0, -3.141592653589793, 0)
-								if tool ~= 'Hammer' then
-									self:GetContainer().Viewmodel[tool].MainPart.Mesh.Scale = Vector3.new(2, 5, 0.3)
-								end
 							end
 						elseif tool == 'DefaultBow' then
 							if tog then
