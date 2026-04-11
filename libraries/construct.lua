@@ -604,7 +604,7 @@ else
 			end
 		},
 		ServerData = {
-			Submode = httpService:JSONDecode(replicatedStorage.Modules.ServerData.Cache.Value)
+			Submode = httpService:JSONDecode(replicatedStorage.Modules.ServerData.Cache.Value).Submode -- i don't really know how queue managed to work with this shit
 		},
 		ToolService = {
 			ToggleBlockSword = function(self, tog, tool)
