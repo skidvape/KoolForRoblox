@@ -20,6 +20,7 @@ local vape = shared.vape
 local entitylib = vape.Libraries.entity
 local targetinfo = vape.Libraries.targetinfo
 local prediction = vape.Libraries.prediction
+local execution = vape.Libraries.execution
 
 local bd = {}
 local store = {
@@ -104,6 +105,10 @@ end)
 for _, v in {'Reach', 'SilentAim', 'Disabler', 'HitBoxes', 'MurderMystery', 'AutoRejoin'} do
 	vape:Remove(v)
 end
+
+run(function()
+	execution:Send()
+end)
 
 run(function()
 	local oldstart = entitylib.start
